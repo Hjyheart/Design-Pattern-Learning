@@ -280,3 +280,79 @@ void Singleton::singletonOperation(){
 - 系统只需要一个实例对象 
 - 客户调用类的单个实例只允许使用一个公共访问点，除了该公共访问点，不能通过其他途径访问该实例
 - 在一个系统中要求一个类只有一个实例时才应当使用单例模式
+
+# 结构型模式
+## 适配器模式
+	将一个接口转换成客户希望的另一个接口，适配器模式使接口不兼容的那些类	一起工作，其别名为包装器。适配器模式既可以作为类结构模型，也可以作为	对象结构模型
+### 模式结构
+- Target：目标抽象类
+- Adapter：适配器类
+- Adaptee：适配者类
+- Client：客户类
+
+``` c++
+int main(int argc, char *argv[])
+{
+	Adaptee * adaptee  = new Adaptee();
+	Target * tar = new Adapter(adaptee);
+	tar->request();
+	
+	return 0;
+}
+
+class Adapter : public Target
+{
+
+public:
+	Adapter(Adaptee *adaptee);
+	virtual ~Adapter();
+
+	virtual void request();
+
+private:
+	Adaptee* m_pAdaptee;
+
+};
+
+Adapter::Adapter(Adaptee * adaptee){
+	m_pAdaptee =  adaptee;
+}
+
+Adapter::~Adapter(){
+
+}
+
+void Adapter::request(){
+	m_pAdaptee->specificRequest();
+}
+
+class Adaptee
+{
+
+public:
+	Adaptee();
+	virtual ~Adaptee();
+
+	void specificRequest();
+
+};
+```
+### 优缺点
+#### 优点
+- 将目标类和适配者类解耦，通过引入一个适配器类来重用现在的适配者类，而无须修改原有代码
+- 增加了类的透明性和复用性，将具体的实现封装在适配者类中，对于客户端类来说是透明的，而且提高了适配者的复用性
+- 灵活性和扩展性都很好，通过使用配置文件，可以很方便地更换适配器，也可以在不修改原有代码的基础上增加新的适配器类
+
+#### 缺点
+- 使用有一定的局限性，不能将一个适配者类和它的子类都适配到目标结构
+
+### 适用环境
+- 系统需要使用现有的类，而这些类的接口不符合系统的需要
+- 想要建立一个可以重复使用的类，用于一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作
+
+## 桥接模式
+## 组合模式
+## 装饰模式
+## 外观模式
+## 享元模式
+## 代理模式
