@@ -351,8 +351,152 @@ public:
 - 想要建立一个可以重复使用的类，用于一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作
 
 ## 桥接模式
-## 组合模式
+	将抽象部分与它的实现部分分离，使它们都可以独立地变化。它是一种对象结构型模式
+### 模式结构
+- Abstraction：抽象类
+- RefinedAbstraction：扩充抽象类
+- Implementor：实现类接口
+- ConcreteImplement：具体实现类
+
+``` c++
+int main(int argc, char *argv[])
+{
+	
+	Implementor * pImp = new ConcreteImplementorA();
+	Abstraction * pa = new RefinedAbstraction(pImp);
+	pa->operation();
+	
+	Abstraction * pb = new RefinedAbstraction(new ConcreteImplementorB());
+	pb->operation();		
+	
+	delete pa;
+	delete pb;
+	
+	return 0;
+}
+
+class RefinedAbstraction : public Abstraction
+{
+
+public:
+	RefinedAbstraction();
+	RefinedAbstraction(Implementor* imp);
+	virtual ~RefinedAbstraction();
+
+	virtual void operation();
+
+};
+
+RefinedAbstraction::RefinedAbstraction(){
+
+}
+
+RefinedAbstraction::RefinedAbstraction(Implementor* imp)
+	:Abstraction(imp)
+{
+}
+
+RefinedAbstraction::~RefinedAbstraction(){
+
+}
+
+void RefinedAbstraction::operation(){
+	cout << "do something else ,and then " << endl;
+	m_pImp->operationImp();
+}
+```
+### 模式分析
+- 抽象化：忽略一些信息，把不同的实体当做同样的实体对待。在面向对象中，将对象的共同性质抽取出来形成类的过程即为抽象化的过程
+- 实现化：针对抽象化给出的具体实现，就是实现化，抽象化与实现化是一对互逆的概念，实现化产生的对象比抽象化更具体，是对抽象化事务的进一步具体化的产物
+- 脱藕：将抽象化和实现化之间的耦合解脱开
+
+### 优缺点
+#### 优点
+- 分离抽象接口及其实现部分
+- 多继承方案的更好解决
+- 实现细节对客户透明，可以对用户隐藏实现细节
+
+#### 缺点
+- 会增加系统的理解与设计难度
+
+### 适用环境
+- 一个系统需要在构建的抽象化角色和具体化角色之间增加更多的灵活性，避免在两个层次之间建立静态的继承联系
+- 一个类存在两个独立变化的维度，且这两个维度都需要进行扩展
+- 对于那些不希望使用继承或者因为层次继承导致系统类的个数急剧增加的系统
+
 ## 装饰模式
+	动态地给一个对象增加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实	现更加灵活。其别名也称为包装器，与适配器模式的别名相同，但它们适用于不同的场	合
+### 模式结构
+- Component：抽象构件
+- ConcreteComponent：具体构建
+- Decorator：抽象装饰类
+- ConcreteDecorator：具体装饰类
+
+```c++
+ConcreteComponent::ConcreteComponent(){
+
+}
+
+ConcreteComponent::~ConcreteComponent(){
+
+}
+
+void ConcreteComponent::operation(){
+	cout << "ConcreteComponent's normal operation!" << endl;
+}
+
+class ConcreteDecoratorA : public Decorator
+{
+
+public:
+	ConcreteDecoratorA(Component* pcmp);
+	virtual ~ConcreteDecoratorA();
+
+	void addBehavior();
+	virtual void operation();
+
+};
+
+ConcreteDecoratorA::ConcreteDecoratorA(Component* pcmp)
+:Decorator(pcmp)
+{
+
+}
+
+ConcreteDecoratorA::~ConcreteDecoratorA(){
+
+}
+
+void ConcreteDecoratorA::addBehavior(){
+	cout << "addBehavior AAAA" << endl;
+}
+
+
+void ConcreteDecoratorA::operation(){
+	Decorator::operation();
+	addBehavior();
+}
+```
+### 模式分析
+- 与继承关系相比，关联关系主要优势在于不会破坏类的封装性，而且继承是一种耦合度较大的静态关系，无法在程序运行时动态拓展
+- 使用装饰模式来实现拓展比继承更加灵活
+
+### 优缺点
+#### 优点
+- 可以比继承提供更多的灵活性
+- 可以通过一种动态的方式来扩展一个对象的功能
+- 可以创造很多不同行为的组合
+- 具体构建类与具体装饰类可以独立变化，用户可以根据需要增加新的具体构建类和具体装饰类
+
+#### 缺点
+- 会产生很多小的对象和装饰类，增加系统的复杂度
+- 更加容易出现错误
+
+### 适用环境
+- 在不影响其他对象的情况下，以动态、透明的方式给单个对象添加职责
+- 需要动态地给一个对象增加功能，这些功能也可以动态地被撤销
+- 需要大量的独立扩展 类定义不能继承
+
 ## 外观模式
 ## 享元模式
 ## 代理模式
